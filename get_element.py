@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-
+from selenium.common.exceptions import NoSuchElementException
 
 class GetElementHtml:
     elements = {
@@ -14,6 +14,8 @@ class GetElementHtml:
         try:
             by = GetElementHtml.elements.get(element.upper())
             return driver.find_element(by, value)
+        except NoSuchElementException:
+            return None
         except:
             print({"erro": True, "Log": "Erro ao tentar encontrar elemento"})
 
@@ -23,4 +25,4 @@ class GetElementHtml:
             return driver.find_elements(by, value)
         except:
             print({"erro": True, "Log": "Erro ao tentar encontrar elemento"})
-          
+        

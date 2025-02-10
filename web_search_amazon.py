@@ -1,8 +1,6 @@
 from browser import Browser
 from get_element import GetElementHtml
 from selenium.webdriver.common.keys import Keys
-from collections import defaultdict
-
 
 class WebSearchAmazon(Browser, GetElementHtml):
 
@@ -24,14 +22,22 @@ class WebSearchAmazon(Browser, GetElementHtml):
         try:
             elements = self.search_elements(self.driver, "XPATH", "//*[@class='a-section a-spacing-base']")
 
-            dict_default = defaultdict(str)
             for element in elements:
-                title = self.search_element(element, "XPATH", ".//*[@class='a-size-base-plus a-spacing-none a-color-base a-text-normal']").text
-                price = self.search_element(element, "XPATH", ".//*[@class='a-price-whole']").text
-                dict_default(title=title, price=price)
+                self.scrol_element(element)
+                title = self.search_element(element, "XPATH", ".//*[@class='a-size-base-plus a-spacing-none a-color-base a-text-normal']")
+                print(type(title))
+                price = self.search_element(element, "XPATH", ".//*[@class='a-price-whole']")
+                dict_ = {"title":title.text if title else None, "price":price.text if price else None}
+                print(dict_)
 
-        except:
-            print({"erro": True, "Log": "Erro ao realizar raspagem no site"})
+        except Exception as e:
+            print({"erro": True, "Motivo": "Erro ao realizar raspagem no site", "Log": {e}})
+
+    def scrol_element(self, element):
+        try:
+            element.location_once_scrolled_into_view
+        except Exception as e:
+            print({"erro": True, "Motivo": "Erro ao descer a pagina site", "Log": {e}})
 
 
 app = WebSearchAmazon('chrome', 'RX 580')

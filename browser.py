@@ -1,9 +1,8 @@
 from selenium.webdriver import Chrome, Firefox
 
-
 class Browser:
 
-    def get_browser(self, browser: str, time_wait = 10):
+    def get_browser(self, browser: str, time_wait = 2):
         browsers = {
         "firefox": Firefox,
         "chrome": Chrome
