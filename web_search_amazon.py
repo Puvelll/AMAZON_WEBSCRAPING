@@ -23,13 +23,12 @@ class WebSearchAmazon(Browser, GetElementHtml, Find):
 
     def get_infos(self):
         try:
-            self.load_screen()
             elements = self.search_elements(self.driver, "XPATH", "//*[@class='a-section a-spacing-base']")
             
             for element in elements:
                 page = Soup(element.get_attribute('outerHTML'), features='html.parser')
 
-                var = self.find_class(page, name_element="a-size-base-plus a-spacing-none a-color-base a-text-normal", price_element="a-price-whole", cents_element="a-price-fraction")
+                var = self.find_class(page, img_element="s-image", name_element="a-size-base-plus a-spacing-none a-color-base a-text-normal", price_element="a-price-whole", cents_element="a-price-fraction")
                 self.result.append(var)
                 self.qtd_items +=1
                 print(self.qtd_items)
@@ -44,8 +43,10 @@ class WebSearchAmazon(Browser, GetElementHtml, Find):
             element = self.search_element(self.driver, "XPATH", f"//*[text()='Próximo']")
             if element.accessible_name == "Próximo":
                 print("Raspagem finalizada")
+                print(self.result)
                 self.quit()
             element.click()
+            self.load_screen()
             
             self.get_infos()
         except Exception as e:
