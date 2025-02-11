@@ -1,8 +1,7 @@
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 
 class GetElementHtml:
-    elements = {
+    tags = {
         "ID": By.ID,
         "XPATH": By.XPATH,
         "CLASS_NAME": By.CLASS_NAME,
@@ -10,19 +9,26 @@ class GetElementHtml:
         "NAME": By.NAME
     }
 
-    def search_element(self, driver, element, value):
+    def search_element(self, driver, tag: str, element: str):
         try:
-            by = GetElementHtml.elements.get(element.upper())
-            return driver.find_element(by, value)
-        except NoSuchElementException:
-            return None
+            by = GetElementHtml.tags.get(tag.upper())
+            result = driver.find_element(by, element)
+            self.scrol_element(result)
+            return result
         except:
-            print({"erro": True, "Log": "Erro ao tentar encontrar elemento"})
+            return{"erro": True, "Log": "Erro ao tentar encontrar elemento"}
 
-    def search_elements(self, driver, element, value):
+    def search_elements(self, driver, tag, element):
         try:
-            by = GetElementHtml.elements.get(element.upper())
-            return driver.find_elements(by, value)
+            by = GetElementHtml.tags.get(tag.upper())
+            result = driver.find_elements(by, element)
+            self.scrol_element(result)
+            return result 
         except:
-            print({"erro": True, "Log": "Erro ao tentar encontrar elemento"})
-        
+            return{"erro": True, "Log": "Erro ao tentar encontrar elemento {}"}
+
+    def scrol_element(self, element):
+        try:
+            element.location_once_scrolled_into_view(element)
+        except Exception as e:
+            return{"erro": True, "Motivo": "Erro ao descer a pagina site", "Log": {e}}
