@@ -8,7 +8,7 @@ class Browser:
     "chrome": Chrome
     }
 
-    def get_browser(cls, browser: str, time_wait = 2):
+    def get_browser(cls, browser: str, time_wait = 5):
         result = Browser.browsers.get(browser if browser == 'firefox' or browser == 'chrome' else None)
         cls.driver = result()
         cls.driver.implicitly_wait(time_wait)
