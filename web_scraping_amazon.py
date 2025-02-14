@@ -8,21 +8,14 @@ class WebSearchAmazon(Browser, GetElementHtml, Find):
 
     def __init__(self, browser, name_product):
         self.driver = self.get_browser(browser)
-        self.name_product = name_product
-        self.driver.get('https://www.amazon.com.br/ref=nav_logo')
+        self.name_product = name_product.replace(' ', '+')
+        self.driver.get(f'https://www.amazon.com.br/s?k={self.name_product}')
         self.result = []
         self.qtd_items = 0
 
-    def search_product(self):
-        try:
-            element = self.search_element(self.driver, "ID", "twotabsearchtextbox")
-            element.send_keys(self.name_product)
-            element.send_keys(Keys.ENTER)
-        except:
-            print({"erro": True, "Log": "Erro ao realizar realizar pesquisa no site"})
-
     def get_infos(self):
         try:
+            self.status_page_ok()
             elements = self.search_elements(self.driver, "XPATH", "//*[@class='a-section a-spacing-base']")
             
             for element in elements:
@@ -50,7 +43,7 @@ class WebSearchAmazon(Browser, GetElementHtml, Find):
             
             self.get_infos()
         except Exception as e:
-            print({"erro": True, "Motivo": "Erro ao realizar raspagem no site", "Log": {e}})
+            print({"erro": True, "Motivo": "Erro ao acessar a proxima pagina", "Log": {e}})
 
     def load_screen(self):
         try:
@@ -59,6 +52,5 @@ class WebSearchAmazon(Browser, GetElementHtml, Find):
             print({"erro": True, "Motivo": "Indicador de load não encontrado", "Log": {e}})
 
 
-app = WebSearchAmazon('chrome', 'Fogão')
-app.search_product()
+app = WebSearchAmazon('firefox', 'Rx 580')
 app.get_infos()

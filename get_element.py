@@ -13,7 +13,6 @@ class GetElementHtml:
         try:
             by = GetElementHtml.tags.get(tag.upper())
             result = driver.find_element(by, element)
-            self.scrol_element(result)
             return result
         except:
             return{"erro": True, "Log": "Erro ao tentar encontrar elemento"}
@@ -22,7 +21,6 @@ class GetElementHtml:
         try:
             by = GetElementHtml.tags.get(tag.upper())
             result = driver.find_elements(by, element)
-            self.scrol_element(result)
             return result 
         except:
             return{"erro": True, "Log": "Erro ao tentar encontrar elemento {}"}
@@ -32,3 +30,11 @@ class GetElementHtml:
             element.location_once_scrolled_into_view(element)
         except Exception as e:
             return{"erro": True, "Motivo": "Erro ao descer a pagina site", "Log": {e}}
+        
+    def status_page_ok(self):
+        try: 
+            while True:
+                if self.driver.execute_script("return document.readyState") == "complete":
+                    return
+        except:
+            return{"erro": True, "Motivo": "Erro ao carregar a pagina, metodo JS", "Log": {e}}
